@@ -13,10 +13,10 @@ describe("ownMocking", () => {
   });
 
   it("getUsername", () => {
+    storage.get.mockReturnValue("Quarzizus");
     const username = getUsername("Quarzizus");
     expect(storage.get).toHaveBeenCalledTimes(1);
     expect(storage.get).toHaveBeenCalledWith("username");
-
-    console.log(username);
+    expect(username).toBe("Quarzizus");
   });
 });
