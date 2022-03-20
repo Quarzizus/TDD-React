@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useFetchPost } from "../../hooks/useFetchPost";
 
 const Form = () => {
   const [formValidated, setFormValidated] = useState(null);
@@ -7,14 +8,18 @@ const Form = () => {
     size: null,
     type: "Electronic",
   });
+  const { submitData, loading } = useFetchPost(formValues);
+
+  const isValidated = () => {
+    return Object.values(formValues).every((value) => !!value === true);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const isValidated = Object.values(formValues).every(
-      (value) => !!value === true
-    );
-    setFormValidated(isValidated);
+    setFormValidated(isValidated());
+    isValidated() && submitData();
   };
+
   const handleChange = (e) => {
     setFormValues({
       ...formValues,
@@ -48,8 +53,11 @@ const Form = () => {
         <option value="Furnite">Furnite</option>
         <option value="Clothing">Clothing</option>
       </select>
-      <button type="submit">Submit</button>
+      <button type="submit" disabled={loading}>
+        Submit {JSON.stringify(loading)}
+      </button>
       {formValidated === false && <h2>all fields are requireds</h2>}
+      {formValidated === true && <h2>Product Stored</h2>}
     </form>
   );
 };
